@@ -1,0 +1,10 @@
+run100
+/////////////////////////////////////////////////////////////
+CUDA
+Traceback (most recent call last):
+  File "../../../evaluate/addTime.py", line 8, in <module>
+    for row in spamreader:
+_csv.Error: line contains NULL byte
+Avg calculation runtime: 0.01567771717171717 ms
+Accuracy: 98.33333333333333
+/////////////////////////////////////////////////////////////

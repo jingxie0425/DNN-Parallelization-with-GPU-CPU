@@ -1,0 +1,37 @@
+multiCNN_pruned run1
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=1
+Total calculation runtime: 5.172869 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=2
+Total calculation runtime: 5.197890999999999 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=4
+Total calculation runtime: 5.090243 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=8
+Total calculation runtime: 5.0822709999999995 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=16
+Total calculation runtime: 5.088042999999999 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=32
+Total calculation runtime: 5.080113000000002 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=64
+Total calculation runtime: 4.904762999999999 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=128
+Traceback (most recent call last):
+  File "../../../evaluate/addTime.py", line 8, in <module>
+    for row in spamreader:
+_csv.Error: line contains NULL byte
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////

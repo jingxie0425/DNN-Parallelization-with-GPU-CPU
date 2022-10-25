@@ -1,0 +1,4 @@
+headDenserunD takes 2.5878 ms
+reluDen takes 0.0164 ms
+denserunD takes 0.0276 ms
+softmaxRun takes 0.0041 ms

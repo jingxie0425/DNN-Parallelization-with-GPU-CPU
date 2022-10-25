@@ -1,0 +1,35 @@
+Normal Job (Not in debug partition)
+singleCNN More run1
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=1
+Total calculation runtime: 4364.303897999999 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=2
+Total calculation runtime: 2661.4295030000003 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=4
+Total calculation runtime: 1282.4589409999999 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=8
+Total calculation runtime: 662.5291599999999 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=16
+Total calculation runtime: 358.320086 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=32
+Total calculation runtime: 321.50230500000004 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=64
+Total calculation runtime: 319.005657 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=128
+Total calculation runtime: 568.2986669999998 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////

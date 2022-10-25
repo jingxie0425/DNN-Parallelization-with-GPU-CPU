@@ -1,0 +1,42 @@
+singleCNN run100
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=1
+Traceback (most recent call last):
+  File "../../../evaluate/addTime.py", line 9, in <module>
+    result = result + float(row[2])
+IndexError: list index out of range
+Traceback (most recent call last):
+  File "../../../evaluate/addTime.py", line 9, in <module>
+    result = result + float(row[2])
+IndexError: list index out of range
+Avg calculation runtime: 165.21926363265302 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=2
+Avg calculation runtime: 89.90236931000001 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=4
+Avg calculation runtime: 50.41270851 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=8
+Avg calculation runtime: 27.971512420000003 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=16
+Avg calculation runtime: 17.736302629999997 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=32
+Avg calculation runtime: 27.386684250000002 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=64
+Avg calculation runtime: 30.907945800000007 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=128
+Avg calculation runtime: 38.53675845 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////

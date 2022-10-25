@@ -1,0 +1,549 @@
+<?xml version="1.0"?>
+<!DOCTYPE HPCToolkitExperiment [
+<!-- ******************************************************************** -->
+<!-- HPCToolkit Experiment DTD						  -->
+<!-- Version 2.2							  -->
+<!-- ******************************************************************** -->
+<!ELEMENT HPCToolkitExperiment (Header, (SecCallPathProfile|SecFlatProfile)*)>
+<!ATTLIST HPCToolkitExperiment
+	  version CDATA #REQUIRED>
+
+  <!-- ****************************************************************** -->
+
+  <!-- Info/NV: flexible name-value pairs: (n)ame; (t)ype; (v)alue -->
+  <!ELEMENT Info (NV*)>
+  <!ATTLIST Info
+	    n CDATA #IMPLIED>
+  <!ELEMENT NV EMPTY>
+  <!ATTLIST NV
+	    n CDATA #REQUIRED
+	    t CDATA #IMPLIED
+	    v CDATA #REQUIRED>
+
+  <!-- ****************************************************************** -->
+  <!-- Header								  -->
+  <!-- ****************************************************************** -->
+  <!ELEMENT Header (Info*)>
+  <!ATTLIST Header
+	    n CDATA #REQUIRED>
+
+  <!-- ****************************************************************** -->
+  <!-- Section Header							  -->
+  <!-- ****************************************************************** -->
+  <!ELEMENT SecHeader (MetricTable?, MetricDBTable?, TraceDBTable?, LoadModuleTable?, FileTable?, ProcedureTable?, Info*)>
+
+    <!-- MetricTable: -->
+    <!ELEMENT MetricTable (Metric)*>
+
+    <!-- Metric: (i)d; (n)ame -->
+    <!--   o: metric sequence order (hpcrun metric order) -->
+    <!--   md: metric description -->
+    <!--   mp: metric parent ID   -->
+    <!--   es: number of samples    (perf_events only) -->
+    <!--   em: event multiplexed    (perf_events only) -->
+    <!--   ep: average event period (perf_events only) -->
+    <!--   (v)alue-type: transient type of values -->
+    <!--   (t)ype: persistent type of metric      -->
+    <!--   fmt: format; show; -->
+    <!ELEMENT Metric (MetricFormula*, Info?)>
+    <!ATTLIST Metric
+	      i            CDATA #REQUIRED
+	      o	           CDATA #IMPLIED
+	      n            CDATA #REQUIRED
+	      md	       CDATA #IMPLIED
+	      mp	       CDATA #IMPLIED
+	      es	       CDATA #IMPLIED
+	      em	       CDATA #IMPLIED
+	      ep	       CDATA #IMPLIED
+	      v            (raw|final|derived-incr|derived) "raw"
+	      t            (inclusive|exclusive|nil) "nil"
+	      partner      CDATA #IMPLIED
+	      fmt          CDATA #IMPLIED
+	      show         (1|0) "1"
+	      show-percent (1|0) "1">
+
+    <!-- MetricFormula represents derived metrics: (t)ype; (frm): formula -->
+    <!ELEMENT MetricFormula (Info?)>
+    <!ATTLIST MetricFormula
+	      t   (combine|finalize|view) "finalize"
+	      i   CDATA #IMPLIED
+	      frm CDATA #REQUIRED>
+
+    <!-- Metric data, used in sections: (n)ame [from Metric]; (v)alue -->
+    <!ELEMENT M EMPTY>
+    <!ATTLIST M
+	      n CDATA #REQUIRED
+	      v CDATA #REQUIRED>
+
+    <!-- MetricDBTable: -->
+    <!ELEMENT MetricDBTable (MetricDB)*>
+
+    <!-- MetricDB: (i)d; (n)ame -->
+    <!--   (t)ype: persistent type of metric -->
+    <!--   db-glob:        file glob describing files in metric db -->
+    <!--   db-id:          id within metric db -->
+    <!--   db-num-metrics: number of metrics in db -->
+    <!--   db-header-sz:   size (in bytes) of a db file header -->
+    <!ELEMENT MetricDB EMPTY>
+    <!ATTLIST MetricDB
+	      i              CDATA #REQUIRED
+	      n              CDATA #REQUIRED
+	      t              (inclusive|exclusive|nil) "nil"
+	      partner        CDATA #IMPLIED
+	      db-glob        CDATA #IMPLIED
+	      db-id          CDATA #IMPLIED
+	      db-num-metrics CDATA #IMPLIED
+	      db-header-sz   CDATA #IMPLIED>
+
+    <!-- TraceDBTable: -->
+    <!ELEMENT TraceDBTable (TraceDB)>
+
+    <!-- TraceDB: (i)d -->
+    <!--   u: unit time of the trace (ms, ns, ..) -->
+    <!--   db-min-time: min beginning time stamp (global) -->
+    <!--   db-max-time: max ending time stamp (global) -->
+    <!ELEMENT TraceDB EMPTY>
+    <!ATTLIST TraceDB
+	      i            CDATA #REQUIRED
+	      u            CDATA #IMPLIED
+	      db-glob      CDATA #IMPLIED
+	      db-min-time  CDATA #IMPLIED
+	      db-max-time  CDATA #IMPLIED
+	      db-header-sz CDATA #IMPLIED>
+
+    <!-- LoadModuleTable assigns a short name to a load module -->
+    <!ELEMENT LoadModuleTable (LoadModule)*>
+
+    <!ELEMENT LoadModule (Info?)>
+    <!ATTLIST LoadModule
+	      i CDATA #REQUIRED
+	      n CDATA #REQUIRED>
+
+    <!-- FileTable assigns a short name to a file -->
+    <!ELEMENT FileTable (File)*>
+
+    <!ELEMENT File (Info?)>
+    <!ATTLIST File
+	      i CDATA #REQUIRED
+	      n CDATA #REQUIRED>
+
+    <!-- ProcedureTable assigns a short name to a procedure -->
+    <!ELEMENT ProcedureTable (Procedure)*>
+
+    <!ELEMENT Procedure (Info?)>
+    <!ATTLIST Procedure
+	      i CDATA #REQUIRED
+	      n CDATA #REQUIRED>
+
+  <!-- ****************************************************************** -->
+  <!-- Section: Call path profile					  -->
+  <!-- ****************************************************************** -->
+  <!ELEMENT SecCallPathProfile (SecHeader, SecCallPathProfileData)>
+  <!ATTLIST SecCallPathProfile
+	    i CDATA #REQUIRED
+	    n CDATA #REQUIRED>
+
+    <!ELEMENT SecCallPathProfileData (PF|M)*>
+      <!-- Procedure frame -->
+      <!--   (i)d: unique identifier for cross referencing -->
+      <!--   (s)tatic scope id -->
+      <!--   (n)ame: a string or an id in ProcedureTable -->
+      <!--   (lm) load module: a string or an id in LoadModuleTable -->
+      <!--   (f)ile name: a string or an id in LoadModuleTable -->
+      <!--   (l)ine range: "beg-end" (inclusive range) -->
+      <!--   (a)lien: whether frame is alien to enclosing P -->
+      <!--   (str)uct: hpcstruct node id -->
+      <!--   (v)ma-range-set: "{[beg-end), [beg-end)...}" -->
+      <!ELEMENT PF (PF|Pr|L|C|S|M)*>
+      <!ATTLIST PF
+		i  CDATA #IMPLIED
+		s  CDATA #IMPLIED
+		n  CDATA #REQUIRED
+		lm CDATA #IMPLIED
+		f  CDATA #IMPLIED
+		l  CDATA #IMPLIED
+		str  CDATA #IMPLIED
+		v  CDATA #IMPLIED>
+      <!-- Procedure (static): GOAL: replace with 'P' -->
+      <!ELEMENT Pr (Pr|L|C|S|M)*>
+      <!ATTLIST Pr
+                i  CDATA #IMPLIED
+		s  CDATA #IMPLIED
+                n  CDATA #REQUIRED
+		lm CDATA #IMPLIED
+		f  CDATA #IMPLIED
+                l  CDATA #IMPLIED
+		a  (1|0) "0"
+		str  CDATA #IMPLIED
+		v  CDATA #IMPLIED>
+      <!-- Callsite (a special StatementRange) -->
+      <!ELEMENT C (PF|M)*>
+      <!ATTLIST C
+		i CDATA #IMPLIED
+		s CDATA #IMPLIED
+		l CDATA #IMPLIED
+		str CDATA #IMPLIED
+		v CDATA #IMPLIED>
+
+  <!-- ****************************************************************** -->
+  <!-- Section: Flat profile						  -->
+  <!-- ****************************************************************** -->
+  <!ELEMENT SecFlatProfile (SecHeader, SecFlatProfileData)>
+  <!ATTLIST SecFlatProfile
+	    i CDATA #REQUIRED
+	    n CDATA #REQUIRED>
+
+    <!ELEMENT SecFlatProfileData (LM|M)*>
+      <!-- Load module: (i)d; (n)ame; (v)ma-range-set -->
+      <!ELEMENT LM (F|P|M)*>
+      <!ATTLIST LM
+                i CDATA #IMPLIED
+                n CDATA #REQUIRED
+		v CDATA #IMPLIED>
+      <!-- File -->
+      <!ELEMENT F (P|L|S|M)*>
+      <!ATTLIST F
+                i CDATA #IMPLIED
+                n CDATA #REQUIRED>
+      <!-- Procedure (Note 1) -->
+      <!ELEMENT P (P|A|L|S|C|M)*>
+      <!ATTLIST P
+                i CDATA #IMPLIED
+                n CDATA #REQUIRED
+                l CDATA #IMPLIED
+		str CDATA #IMPLIED
+		v CDATA #IMPLIED>
+      <!-- Alien (Note 1) -->
+      <!ELEMENT A (A|L|S|C|M)*>
+      <!ATTLIST A
+                i CDATA #IMPLIED
+                f CDATA #IMPLIED
+                n CDATA #IMPLIED
+                l CDATA #IMPLIED
+		str CDATA #IMPLIED
+		v CDATA #IMPLIED>
+      <!-- Loop (Note 1,2) -->
+      <!ELEMENT L (A|Pr|L|S|C|M)*>
+      <!ATTLIST L
+		i CDATA #IMPLIED
+		s CDATA #IMPLIED
+		l CDATA #IMPLIED
+	        f CDATA #IMPLIED
+		str CDATA #IMPLIED
+		v CDATA #IMPLIED>
+      <!-- Statement (Note 2) -->
+      <!--   (it): trace record identifier -->
+      <!ELEMENT S (S|M)*>
+      <!ATTLIST S
+		i  CDATA #IMPLIED
+		it CDATA #IMPLIED
+		s  CDATA #IMPLIED
+		l  CDATA #IMPLIED
+		str  CDATA #IMPLIED
+		v  CDATA #IMPLIED>
+      <!-- Note 1: Contained Cs may not contain PFs -->
+      <!-- Note 2: The 's' attribute is not used for flat profiles -->
+]>
+<HPCToolkitExperiment version="2.2">
+<Header n="driver">
+  <Info/>
+</Header>
+<SecCallPathProfile i="0" n="driver">
+<SecHeader>
+  <MetricTable>
+    <Metric i="2" n="CPUTIME (sec):Sum (I)" o="0" v="derived-incr" md="CPUTIME (sec)" em="0" es="0" ep="-9223372036854775808" t="inclusive" partner="3" show="1" show-percent="1">
+      <MetricFormula t="combine" frm="sum($2, $2)"/>
+      <MetricFormula t="finalize" frm="$2"/>
+      <Info><NV n="units" v="events"/></Info>
+    </Metric>
+    <Metric i="3" n="CPUTIME (sec):Sum (E)" o="-1" v="derived-incr" md="CPUTIME (sec)" em="0" es="0" ep="-9223372036854775808" t="exclusive" partner="2" show="1" show-percent="1">
+      <MetricFormula t="combine" frm="sum($3, $3)"/>
+      <MetricFormula t="finalize" frm="$3"/>
+      <Info><NV n="units" v="events"/></Info>
+    </Metric>
+  </MetricTable>
+  <MetricDBTable>
+    <MetricDB i="0" n="CPUTIME (sec) (I)" t="inclusive" partner="1" db-glob="*.metric-db" db-id="0" db-num-metrics="2" db-header-sz="24"/>
+    <MetricDB i="1" n="CPUTIME (sec) (E)" t="exclusive" partner="0" db-glob="*.metric-db" db-id="1" db-num-metrics="2" db-header-sz="24"/>
+  </MetricDBTable>
+  <LoadModuleTable>
+    <LoadModule i="2" n="/homes/cmsc714-1vef/cmsc714project-main/lide_c_dnnlayers/test_c/multiCNN_pruned/driver"/>
+    <LoadModule i="1711" n="/software/spack-software/2020.05.14/linux-rhel8-ivybridge/gcc-8.4.0/hpctoolkit-2020.03.01-wih3ztasqfu3d5hbfh6sl5j2ave3kcjt/lib/hpctoolkit/ext-libs/libmonitor.so.0.0.0"/>
+    <LoadModule i="1715" n="/software/spack-software/2020.05.14/linux-rhel8-x86_64/gcc-rh8-8.3.1/gcc-8.4.0-vblibp6qsuo6rbkdn6femxo5kcfnwvry/lib64/libstdc++.so.6.0.25"/>
+    <LoadModule i="1747" n="/usr/lib64/libc-2.28.so"/>
+  </LoadModuleTable>
+  <FileTable>
+    <File i="3" n="./src/homes/cmsc714-1vef/cmsc714project-main/lide_c_dnnlayers/actor/lide_c_conv2D.c"/>
+    <File i="280" n="./src/homes/cmsc714-1vef/cmsc714project-main/lide_c_dnnlayers/actor/lide_c_read1D.c"/>
+    <File i="339" n="./src/homes/cmsc714-1vef/cmsc714project-main/lide_c_dnnlayers/graph/lide_c_multiCNN_graph.c"/>
+    <File i="484" n="./src/homes/cmsc714-1vef/cmsc714project-main/nn_c/cnn.c"/>
+    <File i="787" n="./src/homes/cmsc714-1vef/cmsc714project-main/nn_c/read1D.cpp"/>
+    <File i="1357" n="&lt;unknown file&gt; [driver]"/>
+    <File i="1712" n="&lt;unknown file&gt; [libmonitor.so.0.0.0]"/>
+    <File i="1716" n="&lt;unknown file&gt; [libstdc++.so.6.0.25]"/>
+    <File i="1748" n="dcngettext.c"/>
+  </FileTable>
+  <ProcedureTable>
+    <Procedure i="44" n="lide_c_conv2d_invoke(_lide_c_conv2d_context_struct*)" v="0x4025e0"/>
+    <Procedure i="309" n="lide_c_read1D_invoke(_lide_c_read1D_context_struct*)" v="0x4037d3"/>
+    <Procedure i="478" n="lide_c_multiCNN_graph_scheduler(_lide_c_multiCNN_graph_context_struct*)" v="0x402237"/>
+    <Procedure i="532" n="inferencePicLev(float*, float*, float*, unsigned int, unsigned int, unsigned int)" v="0x40459b"/>
+    <Procedure i="549" n="inferencePicPickNonHead(float*, float*, float*, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)" v="0x4046d4"/>
+    <Procedure i="587" n="cnnRunNonHead(float*, float*, float*, float*, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int)" v="0x404957"/>
+    <Procedure i="799" n="Read1D::readExecute()" v="0x40546a"/>
+    <Procedure i="1451" n="main" v="0x401626"/>
+    <Procedure i="1465" n="lide_c_util_guarded_execution" v="0x402318"/>
+    <Procedure i="1469" n="lide_c_util_simple_scheduler" v="0x40235c"/>
+    <Procedure i="1713" n="&lt;program root&gt;" f="1" v="0"/>
+    <Procedure i="1717" n="std::__cxx11::basic_stringstream&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::basic_stringstream(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, std::_Ios_Openmode)" v="0"/>
+    <Procedure i="1719" n="std::locale::locale()" v="0"/>
+    <Procedure i="1721" n="std::basic_ios&lt;char, std::char_traits&lt;char&gt; &gt;::init(std::basic_streambuf&lt;char, std::char_traits&lt;char&gt; &gt;*)" v="0"/>
+    <Procedure i="1723" n="std::basic_ios&lt;char, std::char_traits&lt;char&gt; &gt;::_M_cache_locale(std::locale const&amp;)" v="0"/>
+    <Procedure i="1725" n="std::use_facet&lt;std::ctype&lt;char&gt; &gt;(std::locale const&amp;)" v="0"/>
+    <Procedure i="1727" n="__dynamic_cast" v="0"/>
+    <Procedure i="1729" n="__cxxabiv1::__vmi_class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_info::__sub_kind, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__dyncast_result&amp;) const" v="0"/>
+    <Procedure i="1731" n="std::has_facet&lt;std::num_get&lt;char, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt; &gt; &gt;(std::locale const&amp;)" v="0"/>
+    <Procedure i="1733" n="std::use_facet&lt;std::num_get&lt;char, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt; &gt; &gt;(std::locale const&amp;)" v="0"/>
+    <Procedure i="1735" n="__cxxabiv1::__si_class_type_info::__do_dyncast(long, __cxxabiv1::__class_type_info::__sub_kind, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info const*, void const*, __cxxabiv1::__class_type_info::__dyncast_result&amp;) const" v="0"/>
+    <Procedure i="1737" n="std::basic_istream&lt;char, std::char_traits&lt;char&gt; &gt;::_M_extract&lt;float&gt;(float&amp;)" v="0"/>
+    <Procedure i="1739" n="std::num_get&lt;char, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt; &gt;::do_get(std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt;, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt;, std::ios_base&amp;, std::_Ios_Iostate&amp;, float&amp;) const" v="0"/>
+    <Procedure i="1741" n="std::num_get&lt;char, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt; &gt;::_M_extract_float(std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt;, std::istreambuf_iterator&lt;char, std::char_traits&lt;char&gt; &gt;, std::ios_base&amp;, std::_Ios_Iostate&amp;, std::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;&amp;) const" v="0"/>
+    <Procedure i="1743" n="std::__cxx11::basic_stringstream&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::~basic_stringstream()" v="0"/>
+    <Procedure i="1745" n="std::locale::~locale()" v="0"/>
+    <Procedure i="1749" n="__strcmp_sse2_unaligned" v="0"/>
+  </ProcedureTable>
+  <Info/>
+</SecHeader>
+<SecCallPathProfileData>
+<M n="2" v="0.044588"/>
+<PF i="2" s="1713" l="0" lm="1711" f="1712" n="1713">
+<M n="2" v="0.044588"/>
+<C i="3" s="1714" l="0" v="0xdaca">
+<M n="2" v="0.044588"/>
+<PF i="4" s="1451" l="0" lm="2" f="1357" n="1451">
+<M n="2" v="0.044588"/>
+<C i="5" s="1454" l="0" v="0x40170d">
+<M n="2" v="0.044588"/>
+<PF i="6" s="478" l="243" lm="2" f="339" n="478">
+<M n="2" v="0.044588"/>
+<C i="7" s="483" l="244" v="0x402263">
+<M n="2" v="0.044588"/>
+<PF i="8" s="1469" l="0" lm="2" f="1357" n="1469">
+<M n="2" v="0.044588"/>
+<L i="9" s="1471" l="0" f="1357" v="0x40237d">
+<M n="2" v="0.044588"/>
+<L i="10" s="1473" l="0" f="1357" v="0x4023cd">
+<M n="2" v="0.044588"/>
+<C i="11" s="1475" l="0" v="0x4023c6">
+<M n="2" v="0.044588"/>
+<PF i="12" s="1465" l="0" lm="2" f="1357" n="1465">
+<M n="2" v="0.044588"/>
+<C i="13" s="1468" l="0" v="0x40234e">
+<M n="2" v="0.044588"/>
+<PF i="14" s="44" l="124" lm="2" f="3" n="44">
+<M n="2" v="0.005962"/>
+<C i="15" s="85" l="159" v="0x4027b4">
+<M n="2" v="0.005962"/>
+<PF i="16" s="587" l="136" lm="2" f="484" n="587">
+<M n="2" v="0.005962"/>
+<C i="17" s="592" l="143" v="0x4049a2">
+<M n="2" v="0.005962"/>
+<PF i="18" s="549" l="87" lm="2" f="484" n="549">
+<M n="2" v="0.005962"/>
+<L i="19" s="553" l="91" f="484" v="0x4046fa">
+<M n="2" v="0.005962"/>
+<L i="20" s="556" l="92" f="484" v="0x40470d">
+<M n="2" v="0.005962"/>
+<L i="21" s="559" l="93" f="484" v="0x404720">
+<M n="2" v="0.005962"/>
+<C i="22" s="565" l="100" v="0x4047e7">
+<M n="2" v="0.005962"/>
+<PF i="23" s="532" l="70" lm="2" f="484" n="532">
+<M n="2" v="0.005962"/><M n="3" v="0.005962"/>
+<L i="24" s="536" l="73" f="484" v="0x4045bd">
+<M n="2" v="0.005962"/>
+<L i="25" s="539" l="74" f="484" v="0x4045d0">
+<M n="2" v="0.005962"/>
+<L i="26" s="542" l="75" f="484" v="0x4045e3">
+<M n="2" v="0.005962"/>
+<L i="27" s="545" l="76" f="484" v="0x4045f6">
+<M n="2" v="0.005962"/><M n="3" v="0.005962"/>
+<S i="28" s="547" l="77">
+<M n="2" v="0.005962"/><M n="3" v="0.005962"/>
+</S>
+</L>
+</L>
+</L>
+</L>
+</PF>
+</C>
+</L>
+</L>
+</L>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+<PF i="29" s="309" l="84" lm="2" f="280" n="309">
+<M n="2" v="0.038626"/>
+<C i="30" s="322" l="91" v="0x40381b">
+<M n="2" v="0.038626"/>
+<PF i="31" s="799" l="16" lm="2" f="787" n="799">
+<M n="2" v="0.038626"/>
+<L i="32" s="832" l="25" f="787" v="0x40553a">
+<M n="2" v="0.038626"/>
+<C i="33" s="841" l="26" v="0x4055a9">
+<M n="2" v="0.009331"/>
+<PF i="34" s="1717" l="0" lm="1715" f="1716" n="1717">
+<M n="2" v="0.009331"/>
+<C i="35" s="1718" l="0" v="0x11daad">
+<M n="2" v="0.009331"/>
+<PF i="36" s="1719" l="0" lm="1715" f="1716" n="1719">
+<M n="2" v="0.009331"/><M n="3" v="0.009331"/>
+<S i="37" s="1720" l="0">
+<M n="2" v="0.009331"/><M n="3" v="0.009331"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+<L i="38" s="843" l="28" f="787" v="0x4055a9">
+<M n="2" v="0.029295"/>
+<C i="39" s="854" l="30" v="0x40560c">
+<M n="2" v="0.017772"/>
+<PF i="40" s="1717" l="0" lm="1715" f="1716" n="1717">
+<M n="2" v="0.017772"/>
+<C i="41" s="1718" l="0" v="0x11db2d">
+<M n="2" v="0.017772"/>
+<PF i="42" s="1721" l="0" lm="1715" f="1716" n="1721">
+<M n="2" v="0.017772"/>
+<C i="43" s="1722" l="0" v="0xfbfc0">
+<M n="2" v="0.017772"/>
+<PF i="44" s="1723" l="0" lm="1715" f="1716" n="1723">
+<M n="2" v="0.017772"/>
+<C i="45" s="1724" l="0" v="0xfbba0">
+<M n="2" v="0.005975"/>
+<PF i="46" s="1725" l="0" lm="1715" f="1716" n="1725">
+<M n="2" v="0.005975"/>
+<C i="47" s="1726" l="0" v="0x1065cb">
+<M n="2" v="0.005975"/>
+<PF i="48" s="1727" l="0" lm="1715" f="1716" n="1727">
+<M n="2" v="0.005975"/>
+<C i="49" s="1728" l="0" v="0x98e26">
+<M n="2" v="0.005975"/>
+<PF i="50" s="1729" l="0" lm="1715" f="1716" n="1729">
+<M n="2" v="0.005975"/>
+<C i="51" s="1730" l="0" v="0x9bef0">
+<M n="2" v="0.005975"/>
+<PF i="52" s="1749" l="0" lm="1747" f="1748" n="1749">
+<M n="2" v="0.005975"/><M n="3" v="0.005975"/>
+<S i="53" s="1750" l="0">
+<M n="2" v="0.005975"/><M n="3" v="0.005975"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+<C i="54" s="1724" l="0" v="0xfbbca">
+<M n="2" v="0.005885"/>
+<PF i="55" s="1731" l="0" lm="1715" f="1716" n="1731">
+<M n="2" v="0.005885"/>
+<C i="56" s="1732" l="0" v="0x1081f0">
+<M n="2" v="0.005885"/>
+<PF i="57" s="1727" l="0" lm="1715" f="1716" n="1727">
+<M n="2" v="0.005885"/><M n="3" v="0.005885"/>
+<S i="58" s="1728" l="0">
+<M n="2" v="0.005885"/><M n="3" v="0.005885"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+<C i="59" s="1724" l="0" v="0xfbbd6">
+<M n="2" v="0.005912"/>
+<PF i="60" s="1733" l="0" lm="1715" f="1716" n="1733">
+<M n="2" v="0.005912"/>
+<C i="61" s="1734" l="0" v="0x10719b">
+<M n="2" v="0.005912"/>
+<PF i="62" s="1727" l="0" lm="1715" f="1716" n="1727">
+<M n="2" v="0.005912"/>
+<C i="63" s="1728" l="0" v="0x98e26">
+<M n="2" v="0.005912"/>
+<PF i="64" s="1735" l="0" lm="1715" f="1716" n="1735">
+<M n="2" v="0.005912"/><M n="3" v="0.005912"/>
+<S i="65" s="1736" l="0">
+<M n="2" v="0.005912"/><M n="3" v="0.005912"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+<C i="66" s="855" l="30" v="0x405673">
+<M n="2" v="0.00593"/>
+<PF i="67" s="1743" l="0" lm="1715" f="1716" n="1743">
+<M n="2" v="0.00593"/>
+<C i="68" s="1744" l="0" v="0x118efe">
+<M n="2" v="0.00593"/>
+<PF i="69" s="1745" l="0" lm="1715" f="1716" n="1745">
+<M n="2" v="0.00593"/><M n="3" v="0.00593"/>
+<S i="70" s="1746" l="0">
+<M n="2" v="0.00593"/><M n="3" v="0.00593"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+<C i="71" s="856" l="32" v="0x405625">
+<M n="2" v="0.005593"/>
+<PF i="72" s="1737" l="0" lm="1715" f="1716" n="1737">
+<M n="2" v="0.005593"/>
+<C i="73" s="1738" l="0" v="0x100760">
+<M n="2" v="0.005593"/>
+<PF i="74" s="1739" l="0" lm="1715" f="1716" n="1739">
+<M n="2" v="0.005593"/>
+<C i="75" s="1740" l="0" v="0x10d507">
+<M n="2" v="0.005593"/>
+<PF i="76" s="1741" l="0" lm="1715" f="1716" n="1741">
+<M n="2" v="0.005593"/><M n="3" v="0.005593"/>
+<S i="77" s="1742" l="0">
+<M n="2" v="0.005593"/><M n="3" v="0.005593"/>
+</S>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</L>
+</L>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</L>
+</L>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</C>
+</PF>
+</SecCallPathProfileData>
+</SecCallPathProfile>
+</HPCToolkitExperiment>

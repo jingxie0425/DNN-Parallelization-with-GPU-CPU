@@ -1,0 +1,35 @@
+Normal Job (Not in debug partition)
+singleMLP More run1
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=1
+Total calculation runtime: 26.219744999999996 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=2
+Total calculation runtime: 13.789738999999999 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=4
+Total calculation runtime: 7.819625 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=8
+Total calculation runtime: 4.837034999999999 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=16
+Total calculation runtime: 3.672498 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=32
+Total calculation runtime: 4.996705 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=64
+Total calculation runtime: 6.018768 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=128
+Total calculation runtime: 8.638372 ms
+Accuracy: 97.14285714285714
+/////////////////////////////////////////////////////////////

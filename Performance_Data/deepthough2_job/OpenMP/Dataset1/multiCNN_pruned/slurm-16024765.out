@@ -1,0 +1,35 @@
+Normal Job (Not in debug partition)
+multiCNN_pruned run1
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=1
+Total calculation runtime: 5.032066 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=2
+Total calculation runtime: 3.029484999999999 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=4
+Total calculation runtime: 2.1554349999999998 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=8
+Total calculation runtime: 1.7288230000000002 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=16
+Total calculation runtime: 2.223685 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=32
+Total calculation runtime: 3.2073609999999997 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=64
+Total calculation runtime: 6.377460000000001 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
+OMP_NUM_THREADS=128
+Total calculation runtime: 8.412187999999999 ms
+Accuracy: 94.28571428571428
+/////////////////////////////////////////////////////////////
